@@ -1,5 +1,5 @@
 
-#include <basics.h>
+#include <cpu.h>
 
 #define R(i) gpr(i)
 #define C(i) csrs(i)

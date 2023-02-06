@@ -30,7 +30,7 @@ typedef struct Decode {
   vaddr_t snpc; // static next pc
   vaddr_t dnpc; // dynamic next pc
   ISADecodeInfo isa;
-  // IFDEF(CONFIG_ITRACE, char logbuf[128]);
+  char logbuf[16];
 } Decode;
 
 // csr defines
@@ -146,5 +146,7 @@ finish:
 
 #define INSTPAT_START(name) { const void ** __instpat_end = &&concat(__instpat_end_, name);
 #define INSTPAT_END(name)   concat(__instpat_end_, name): ; }
+
+#include <reg.h>
 
 #endif

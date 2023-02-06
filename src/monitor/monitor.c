@@ -1,4 +1,4 @@
-#include "idb/idb.h"
+#include "idb/include/idb.h"
 #include <getopt.h>
 
 static void welcome() {

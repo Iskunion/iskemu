@@ -2,7 +2,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include <common.h>
+#include "common.h"
 
 // ----------- state -----------
 
@@ -42,7 +42,7 @@ uint64_t get_time();
 
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 
-#define log_write(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, \
+#define log_write(...) \
   do { \
     extern FILE* log_fp; \
     extern bool log_enable(); \
@@ -50,24 +50,12 @@ uint64_t get_time();
       fprintf(log_fp, __VA_ARGS__); \
       fflush(log_fp); \
     } \
-  } while (0) \
-)
-
-extern FILE* share_fp;
-extern FILE* print_fp;
-
-#define print_write(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, \
-  do { \
-    fprintf(print_fp, __VA_ARGS__); \
-    fflush(print_fp); \
-  } while (0) \
-)
+  } while (0)
 
 #define _Log(...) \
   do { \
     printf(__VA_ARGS__); \
     log_write(__VA_ARGS__); \
   } while (0)
-
 
 #endif

@@ -1,10 +1,7 @@
 
-#include <common.h>
-#include <utils.h>
-#include <device/alarm.h>
-#ifndef CONFIG_TARGET_AM
+#include <basics.h>
+#include <device.h>
 #include <SDL2/SDL.h>
-#endif
 
 void init_map();
 void init_serial();
@@ -36,13 +33,13 @@ void device_update() {
         nemu_state.state = NEMU_QUIT;
         break;
       // If a key was pressed
-      case SDL_KEYDOWN:
-      case SDL_KEYUP: {
-        uint8_t k = event.key.keysym.scancode;
-        bool is_keydown = (event.key.type == SDL_KEYDOWN);
-        send_key(k, is_keydown);
-        break;
-      }
+      // case SDL_KEYDOWN:
+      // case SDL_KEYUP: {
+      //   uint8_t k = event.key.keysym.scancode;
+      //   bool is_keydown = (event.key.type == SDL_KEYDOWN);
+      //   send_key(k, is_keydown);
+      //   break;
+      // }
       default: break;
     }
   }
@@ -56,7 +53,7 @@ void sdl_clear_event_queue() {
 void init_device() {
 
   init_map();
-  init_alarm();
+  // init_alarm();
   init_serial();
   init_timer();
 

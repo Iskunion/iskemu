@@ -4,9 +4,8 @@ extern int is_batch_mode;
 
 void set_nemu_state(int state, vaddr_t pc, int halt_ret);
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
-#ifdef CONFIG_ETRACE
+
   Log("Received interrupt %d at 0x%08x", NO, epc);
-#endif
 
   csrs(MEPC) = (NO == IRQ_TIMER) ? (epc) : (epc + 4);
   csrs(MCAUSE) = NO;

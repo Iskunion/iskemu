@@ -8,7 +8,7 @@ static inline word_t host_read(void *addr, int len) {
     case 1: return *(uint8_t  *)addr;
     case 2: return *(uint16_t *)addr;
     case 4: return *(uint32_t *)addr;
-    default: MUXDEF(CONFIG_RT_CHECK, assert(0), return 0);
+    default: assert(0);
   }
 }
 

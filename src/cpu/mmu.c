@@ -1,4 +1,5 @@
 #include <cpu.h>
+#include <mainmem.h>
 
 #define exp2(x)         (1u << (x))
 #define PGW             (12)

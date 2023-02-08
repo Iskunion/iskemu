@@ -1,7 +1,7 @@
 #ifndef __CPU_CPU_H__
 #define __CPU_CPU_H__
 
-#include <common.h>
+#include <basics.h>
 
 void set_nemu_state(int state, vaddr_t pc, int halt_ret);
 void invalid_inst(vaddr_t thispc);
@@ -73,6 +73,8 @@ vaddr_t isa_raise_intr(word_t NO, vaddr_t epc);
 #define INTR_EMPTY ((word_t)-1)
 #define IRQ_TIMER 0x80000007
 word_t isa_query_intr();
+
+void cpu_exec(uint64_t n);
 
 // --- pattern matching mechanism ---
 __attribute__((always_inline))
@@ -147,6 +149,6 @@ finish:
 #define INSTPAT_START(name) { const void ** __instpat_end = &&concat(__instpat_end_, name);
 #define INSTPAT_END(name)   concat(__instpat_end_, name): ; }
 
-#include <reg.h>
+#include "cpu/reg.h"
 
 #endif

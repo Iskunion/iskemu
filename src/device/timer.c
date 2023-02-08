@@ -1,28 +1,49 @@
 #include <cpu.h>
 #include <device.h>
+#include <mainmem.h>
 
-static uint32_t *rtc_port_base = NULL;
+static uint32_t intr_nr = 0;
+static uint32_t timer_rtc = 0;
+// static uint32_t uptime = 0;
+
+#define RTC_OFFSET    0x00
+#define UPTIME_OFFSET 0x04
+#define INTR_OFFSET   0x08
+
+static uint8_t *rtc_port_base = NULL;
 
 static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
-  assert(offset == 0 || offset == 4);
-  if (!is_write && offset == 4) {
-    uint64_t us = get_time();
-    rtc_port_base[0] = (uint32_t)us;
-    rtc_port_base[1] = us >> 32;
+  switch (offset)
+  {
+    case RTC_OFFSET:
+      if (is_write) timer_rtc = host_read(rtc_port_base + RTC_OFFSET, 4);
+      else host_write(rtc_port_base + RTC_OFFSET, 4, timer_rtc);
+      break;
+    case UPTIME_OFFSET:
+      if (is_write) panic("timer readonly");
+      else host_write(rtc_port_base + UPTIME_OFFSET, 4, (uint32_t) get_time());
+      break;
+    case INTR_OFFSET:
+      if (is_write) intr_nr = host_read(rtc_port_base + INTR_OFFSET, 4);
+      else host_write(rtc_port_base + INTR_OFFSET, 4, intr_nr);
+      break;
+    default:
+      panic("error");
+      break;
   }
 }
 
-static void timer_intr() {
-  if (nemu_state.state == NEMU_RUNNING) {
-    extern void dev_raise_intr();
-    dev_raise_intr();
-  }
-}
+// static void timer_intr() {
+//   if (nemu_state.state == NEMU_RUNNING) {
+//     extern void dev_raise_intr();
+//     dev_raise_intr();
+//   }
+// }
 
 void init_timer() {
-  rtc_port_base = (uint32_t *)new_space(8);
+  rtc_port_base = new_space(12);
   
-  add_mmio_map("rtc", CONFIG_RTC_MMIO, rtc_port_base, 8, rtc_io_handler);
+  add_mmio_map("rtc", CONFIG_RTC_MMIO, rtc_port_base, 12, rtc_io_handler);
 
-  IFNDEF(CONFIG_TARGET_AM, add_alarm_handle(timer_intr));
+  // add_alarm_handle(timer_intr);
 }

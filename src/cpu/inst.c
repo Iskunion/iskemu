@@ -1,5 +1,6 @@
 
 #include <cpu.h>
+#include <mainmem.h>
 
 #define R(i) gpr(i)
 #define C(i) csrs(i)

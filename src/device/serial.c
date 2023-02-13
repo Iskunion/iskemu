@@ -46,7 +46,6 @@ static void serial_putc(char ch) {
 }
 
 static void serial_io_handler(uint32_t offset, int len, bool is_write) {
-  assert(len == 1);
   switch (offset) {
     case TX_OFFSET:
       if (is_write) serial_putc(host_read(serial_base + TX_OFFSET, 1));

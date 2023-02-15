@@ -26,6 +26,7 @@ typedef struct Serial_Status
 
 static Serial_Ctrl serial_ctrl = {.rx_enable = 0, .tx_enable = 0};
 static Serial_Status serial_status = {.rx_ready = 0, .tx_busy = 0};
+FILE *uartdatain;
 
 static uint32_t ctrl2int(Serial_Ctrl target) {
   return *(uint32_t *) &target;
@@ -46,6 +47,7 @@ static void serial_putc(char ch) {
 }
 
 static void serial_io_handler(uint32_t offset, int len, bool is_write) {
+  uint8_t ch;
   switch (offset) {
     case TX_OFFSET:
       if (is_write) serial_putc(host_read(serial_base + TX_OFFSET, 1));
@@ -53,7 +55,10 @@ static void serial_io_handler(uint32_t offset, int len, bool is_write) {
       break;
     case RX_OFFSET:
       if (is_write) panic("uart_rx do not support write");
-      else panic("uart_rx do not support read");
+      else {
+        ch = getc(uartdatain);
+        host_write(serial_base + RX_OFFSET, 1, ch == EOF ? '\0' : ch);
+      }
       break;
     case BAUD_OFFSET:
       panic("not implemented");
@@ -75,5 +80,6 @@ static void serial_io_handler(uint32_t offset, int len, bool is_write) {
 
 void init_serial() {
   serial_base = new_space(20);
+  uartdatain = fopen("../res/uartdatain", "r");
   add_mmio_map("serial", CONFIG_SERIAL_MMIO, serial_base, 20, serial_io_handler);
 }

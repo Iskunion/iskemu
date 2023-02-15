@@ -17,7 +17,7 @@ static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
   {
     case RTC_OFFSET:
       if (is_write) timer_rtc = host_read(rtc_port_base + RTC_OFFSET, 4);
-      else host_write(rtc_port_base + RTC_OFFSET, 4, timer_rtc);
+      else host_write(rtc_port_base + RTC_OFFSET, 4, timer_rtc = get_time() / 1000000);
       break;
     case UPTIME_OFFSET:
       if (is_write) panic("timer readonly");
@@ -42,7 +42,7 @@ static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
 
 void init_timer() {
   rtc_port_base = new_space(12);
-  
+  timer_rtc = get_time();
   add_mmio_map("rtc", CONFIG_RTC_MMIO, rtc_port_base, 12, rtc_io_handler);
 
   // add_alarm_handle(timer_intr);

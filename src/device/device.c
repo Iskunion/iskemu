@@ -24,7 +24,7 @@ void device_update() {
   }
   last = now;
 
-  // vga_update_screen();
+  vga_update_screen();
 
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
@@ -56,8 +56,7 @@ void init_device() {
   // init_alarm();
   init_serial();
   init_timer();
-
-  // init_vga();
+  init_vga();
   // init_i8042();
   // init_audio();
   // init_disk();

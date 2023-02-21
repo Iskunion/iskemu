@@ -33,13 +33,14 @@ void device_update() {
         nemu_state.state = NEMU_QUIT;
         break;
       // If a key was pressed
-      // case SDL_KEYDOWN:
-      // case SDL_KEYUP: {
-      //   uint8_t k = event.key.keysym.scancode;
-      //   bool is_keydown = (event.key.type == SDL_KEYDOWN);
-      //   send_key(k, is_keydown);
-      //   break;
-      // }
+      case SDL_KEYDOWN:
+      case SDL_KEYUP: {
+        uint8_t k = event.key.keysym.scancode;
+        // Log("receive scan code: 0x%02x", k);
+        bool is_keydown = (event.key.type == SDL_KEYDOWN);
+        send_key(k, is_keydown);
+        break;
+      }
       default: break;
     }
   }
@@ -57,7 +58,7 @@ void init_device() {
   init_serial();
   init_timer();
   init_vga();
-  // init_i8042();
+  init_i8042();
   // init_audio();
   // init_disk();
 

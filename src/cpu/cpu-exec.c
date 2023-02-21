@@ -55,13 +55,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
-
+#ifdef CONFIG_DEBUG
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   for (int i = 3; i >= 0; i--) 
     p += snprintf(p, 4, " %02x", inst[i]);
-  
+#endif
   // memset(p, ' ', 2); p += 2;
   // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   // disassemble(p, s->logbuf + sizeof(s->logbuf) - p, s->pc, (uint8_t *)&s->isa.inst.val, ilen);

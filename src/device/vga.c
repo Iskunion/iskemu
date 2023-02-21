@@ -39,12 +39,12 @@ static void init_screen() {
 }
 
 static inline void update_screen() {
-  Log("biw");
-  uint8_t *now = vmem;
-  int a = 100;
-  while(a--) {
-    printf("%02x\n", *now++);
-  }
+  // Log("biw");
+  // uint8_t *now = vmem;
+  // int a = 100;
+  // while(a--) {
+  //   printf("%02x\n", *now++);
+  // }
   SDL_UpdateTexture(texture, NULL, vmem, SCREEN_W * sizeof(uint8_t));
   SDL_RenderClear(renderer);
   SDL_RenderCopy(renderer, texture, NULL, NULL);
